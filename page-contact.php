@@ -4,6 +4,7 @@
  * Template for displaying the Contact Us page
  *
  * @package Langgam_Fikir
+ * Version: 1.9.5
  */
 
 get_header();
@@ -19,7 +20,6 @@ get_header();
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
             
             <div class="contact-layout">
-                <!-- Form Section (Left - 60%) -->
                 <div class="contact-form-area">
                     <div class="contact-form-inner">
                         <div class="page-title-header">
@@ -40,21 +40,20 @@ get_header();
                         <?php endif; ?>
                         
                         <?php
-                        // Get book information from URL parameters
+                        // Get and validate book information from URL parameters
                         $book_id = isset( $_GET['book_id'] ) ? intval( $_GET['book_id'] ) : 0;
-                        $book_title = isset( $_GET['book_title'] ) ? sanitize_text_field( urldecode( $_GET['book_title'] ) ) : '';
-                        
-                        // Build pre-filled subject and message
                         $prefilled_subject = '';
                         $prefilled_message = '';
                         
-                        if ( $book_id && $book_title ) {
+                        // Security Check: Ensure the ID belongs to a valid 'book' post type
+                        if ( $book_id > 0 && get_post_type( $book_id ) === 'book' ) {
+                            $book_title = get_the_title( $book_id );
                             $prefilled_subject = sprintf( __( 'Book Order - %s', 'langgam-fikir' ), $book_title );
                             
                             // Get book details from post meta
                             $author = get_post_meta( $book_id, '_book_author', true );
-                            $year = get_post_meta( $book_id, '_book_year', true );
-                            $price = get_post_meta( $book_id, '_book_price', true );
+                            $year   = get_post_meta( $book_id, '_book_year', true );
+                            $price  = get_post_meta( $book_id, '_book_price', true );
                             
                             $prefilled_message = sprintf(
                                 __( "I am interested in ordering:\n\nBook: %s", 'langgam-fikir' ),
@@ -121,7 +120,6 @@ get_header();
                     </div>
                 </div>
                 
-                <!-- Contact Info Section (Right - 40%) -->
                 <div class="contact-info-area">
                     <div class="contact-info-inner">
                         <?php
@@ -133,7 +131,7 @@ get_header();
                         
                         // Defaults if not set
                         if ( empty( $contact_description ) ) {
-                            $contact_description = __( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec molestie in tellus ac luctus. Vestibulum porta velit eget est aliquet, id egestas magna varius.', 'langgam-fikir' );
+                            $contact_description = __( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'langgam-fikir' );
                         }
                         if ( empty( $contact_email ) ) {
                             $contact_email = 'contact@langgamfikir.com';
