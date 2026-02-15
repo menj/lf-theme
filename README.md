@@ -201,6 +201,13 @@ Edit `/css/main.css`:
 
 ## Version History / Changelog
 
+### Version 1.9.5 (February 2026)
+- **FIX**: Removed all hardcoded absolute URLs for assets and logos.
+- **FIX**: Updated heading overrides to be non-destructive for block editor settings.
+- **NEW**: Experience badge on homepage is now data-driven and only displays if Customizer values are set.
+- **SECURITY**: Added server-side validation for book order metadata on the contact page.
+- **STABILITY**: Fixed admin script dependencies to ensure Media Uploader loads correctly.
+
 ### Version 1.9.4 (February 2026)
 - **Enhanced footer design** — Three-column grid layout with branding, navigation, and legal sections
 - Added site logo display in footer branding column
