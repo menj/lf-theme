@@ -5,7 +5,6 @@
  *
  * @package Langgam_Fikir
  * @since 1.0.0
- * Version: 1.9.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -121,25 +120,25 @@ function langgam_fikir_enqueue_assets() {
     // Main CSS file
     wp_enqueue_style( 
         'langgam-fikir-main', 
-        get_stylesheet_directory_uri() . '/css/main.css',
+        get_stylesheet_directory_uri() . '/assets/css/main.css',
         array( 'langgam-fikir-style' ),
-        filemtime( get_stylesheet_directory() . '/css/main.css' )
+        filemtime( get_stylesheet_directory() . '/assets/css/main.css' )
     );
     
     // Additional CSS for forms and extra pages
     wp_enqueue_style( 
         'langgam-fikir-additional', 
-        get_stylesheet_directory_uri() . '/css/additional.css',
+        get_stylesheet_directory_uri() . '/assets/css/additional.css',
         array( 'langgam-fikir-main' ),
-        filemtime( get_stylesheet_directory() . '/css/additional.css' )
+        filemtime( get_stylesheet_directory() . '/assets/css/additional.css' )
     );
     
     // Main JavaScript
     wp_enqueue_script(
         'langgam-fikir-main',
-        get_stylesheet_directory_uri() . '/js/main.js',
+        get_stylesheet_directory_uri() . '/assets/js/main.js',
         array(),
-        filemtime( get_stylesheet_directory() . '/js/main.js' ),
+        filemtime( get_stylesheet_directory() . '/assets/js/main.js' ),
         true
     );
     
@@ -152,7 +151,7 @@ function langgam_fikir_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'langgam_fikir_enqueue_assets', 20 );
 
 /**
- * Enqueue Admin Assets with proper dependencies
+ * Enqueue Admin Styles and Scripts
  */
 function langgam_fikir_enqueue_admin_assets( $hook ) {
     // Only load on post edit pages
@@ -168,40 +167,25 @@ function langgam_fikir_enqueue_admin_assets( $hook ) {
         // Enqueue admin CSS
         wp_enqueue_style(
             'langgam-fikir-admin',
-            get_stylesheet_directory_uri() . '/css/admin.css',
+            get_stylesheet_directory_uri() . '/assets/css/admin.css',
             array(),
-            filemtime( get_stylesheet_directory() . '/css/admin.css' )
+            filemtime( get_stylesheet_directory() . '/assets/css/admin.css' )
         );
         
-        // Enqueue WordPress media uploader and dependencies
+        // Enqueue WordPress media uploader
         wp_enqueue_media();
         
-        // Enqueue admin JavaScript with full dependencies
+        // Enqueue admin JavaScript
         wp_enqueue_script(
             'langgam-fikir-admin',
-            get_stylesheet_directory_uri() . '/js/admin.js',
-            array( 'jquery', 'media-upload', 'media-editor', 'wp-media-utils' ),
-            filemtime( get_stylesheet_directory() . '/js/admin.js' ),
+            get_stylesheet_directory_uri() . '/assets/js/admin.js',
+            array( 'jquery', 'media-upload' ),
+            filemtime( get_stylesheet_directory() . '/assets/js/admin.js' ),
             true
         );
     }
 }
 add_action( 'admin_enqueue_scripts', 'langgam_fikir_enqueue_admin_assets' );
-
-/**
- * Safer Heading Style Injection
- * Targets headings without custom colors to avoid breaking block settings.
- */
-function langgam_fikir_custom_block_styles() {
-    echo '<style>
-        :where(.wp-block-heading):not([style*="color"]) {
-            font-family: var(--font-primary) !important;
-            color: var(--color-primary) !important;
-            font-weight: 600 !important;
-        }
-    </style>';
-}
-add_action( 'wp_head', 'langgam_fikir_custom_block_styles' );
 
 /**
  * Register Custom Post Type: Books
@@ -829,7 +813,7 @@ function langgam_fikir_privacy_template( $template ) {
 add_filter( 'template_include', 'langgam_fikir_privacy_template' );
 
 /**
- * Customizer Settings for Homepage and Branding
+ * Customizer Settings for Homepage
  */
 function langgam_fikir_customize_register( $wp_customize ) {
     $wp_customize->add_section( 'langgam_fikir_homepage', array(
@@ -844,8 +828,14 @@ function langgam_fikir_customize_register( $wp_customize ) {
 
     $wp_customize->add_control( 'featured_books_count', array(
         'label'       => __( 'Number of Featured Publications', 'langgam-fikir' ),
+        'description' => __( 'How many books to show in the Featured Publications section on the homepage.', 'langgam-fikir' ),
         'section'     => 'langgam_fikir_homepage',
         'type'        => 'number',
+        'input_attrs' => array(
+            'min'  => 1,
+            'max'  => 12,
+            'step' => 1,
+        ),
     ) );
 
     $wp_customize->add_setting( 'featured_resources_count', array(
@@ -855,46 +845,39 @@ function langgam_fikir_customize_register( $wp_customize ) {
 
     $wp_customize->add_control( 'featured_resources_count', array(
         'label'       => __( 'Number of Resources on Homepage', 'langgam-fikir' ),
+        'description' => __( 'How many resource posts to show on the homepage.', 'langgam-fikir' ),
         'section'     => 'langgam_fikir_homepage',
         'type'        => 'number',
+        'input_attrs' => array(
+            'min'  => 1,
+            'max'  => 12,
+            'step' => 1,
+        ),
     ) );
-    
-    // Experience Badge Branding
-    $wp_customize->add_section( 'lf_homepage_custom', array( 'title' => 'Homepage Branding', 'priority' => 32 ) );
-    $wp_customize->add_setting( 'experience_years', array( 'default' => '' ) );
-    $wp_customize->add_control( 'experience_years', array( 'label' => 'Experience Years (e.g. 10+)', 'section' => 'lf_homepage_custom', 'type' => 'text' ) );
-    $wp_customize->add_setting( 'experience_label', array( 'default' => '' ) );
-    $wp_customize->add_control( 'experience_label', array( 'label' => 'Badge Label', 'section' => 'lf_homepage_custom', 'type' => 'text' ) );
-
-    // Company Contact Information Section
-    $wp_customize->add_section( 'langgam_fikir_contact', array(
-        'title'       => __( 'Contact Information', 'langgam-fikir' ),
-        'description' => __( 'Configure your company contact details for the footer.', 'langgam-fikir' ),
-        'priority'    => 31,
-    ) );
-    
-    $wp_customize->add_setting( 'company_name', array( 'default' => get_bloginfo( 'name' ), 'sanitize_callback' => 'sanitize_text_field' ) );
-    $wp_customize->add_control( 'company_name', array( 'label' => __( 'Company Name', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'text' ) );
-    
-    $wp_customize->add_setting( 'company_address', array( 'default' => '', 'sanitize_callback' => 'sanitize_textarea_field' ) );
-    $wp_customize->add_control( 'company_address', array( 'label' => __( 'Address', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'textarea' ) );
-    
-    $wp_customize->add_setting( 'company_phone', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
-    $wp_customize->add_control( 'company_phone', array( 'label' => __( 'Phone Number', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'text' ) );
-    
-    $wp_customize->add_setting( 'company_email', array( 'default' => '', 'sanitize_callback' => 'sanitize_email' ) );
-    $wp_customize->add_control( 'company_email', array( 'label' => __( 'Email Address', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'email' ) );
-    
-    $wp_customize->add_setting( 'legal_entity_name', array( 'default' => 'Langgam Fikir Enterprise', 'sanitize_callback' => 'sanitize_text_field' ) );
-    $wp_customize->add_control( 'legal_entity_name', array( 'label' => __( 'Legal Entity Name', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'text' ) );
-    
-    $wp_customize->add_setting( 'registration_number', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
-    $wp_customize->add_control( 'registration_number', array( 'label' => __( 'Registration Number', 'langgam-fikir' ), 'section' => 'langgam_fikir_contact', 'type' => 'text' ) );
 }
 add_action( 'customize_register', 'langgam_fikir_customize_register' );
 
 /**
- * Fallback for the Footer Legal menu
+ * Strip inline styles from block editor headings so child theme CSS applies
+ * Twenty Twenty-Five injects inline styles on .wp-block-heading elements
+ * that override child theme stylesheets regardless of specificity.
+ */
+function langgam_fikir_clean_block_heading_styles( $content ) {
+    if ( empty( $content ) ) {
+        return $content;
+    }
+    $content = preg_replace(
+        '/<(h[1-6])([^>]*)\s+style="[^"]*"([^>]*)>/i',
+        '<$1$2$3>',
+        $content
+    );
+    return $content;
+}
+add_filter( 'the_content', 'langgam_fikir_clean_block_heading_styles', 999 );
+
+/**
+ * Fallback for the Footer Legal menu when no menu is assigned.
+ * Outputs links to Privacy Policy and a placeholder Terms of Service page.
  */
 function lf_footer_legal_fallback() {
     $privacy_page = get_privacy_policy_url();

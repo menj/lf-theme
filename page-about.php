@@ -4,7 +4,6 @@
  * Template for displaying the About Us page
  *
  * @package Langgam_Fikir
- * Version: 1.9.5
  */
 
 get_header();
@@ -20,6 +19,7 @@ get_header();
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
             
             <div class="about-layout">
+                <!-- Logo Section -->
                 <div class="about-logo-section">
                     <div class="about-logo-container">
                         <?php
@@ -30,15 +30,22 @@ get_header();
                             // Use custom About page logo
                             echo wp_get_attachment_image( $custom_logo_id, 'full', false, array( 'class' => 'about-logo-image' ) );
                         } elseif ( has_custom_logo() ) {
-                            // Use site logo set in Customizer
+                            // Use site logo
                             $custom_logo_id = get_theme_mod( 'custom_logo' );
                             echo wp_get_attachment_image( $custom_logo_id, 'full', false, array( 'class' => 'about-logo-image' ) );
-                        } 
-                        // Removed hardcoded /2025/08/ path to prevent broken images
+                        } else {
+                            // Fallback to default logo URL
+                            ?>
+                            <img src="<?php echo esc_url( home_url( '/wp-content/uploads/2025/08/LF-Logo-No-BG.png' ) ); ?>" 
+                                 alt="<?php bloginfo( 'name' ); ?>" 
+                                 class="about-logo-image">
+                            <?php
+                        }
                         ?>
                     </div>
                 </div>
                 
+                <!-- Content Section -->
                 <div class="about-content-area">
                     <div class="about-content-inner">
                         <div class="page-title-header">
@@ -111,4 +118,5 @@ get_header();
     
 </main>
 
-<?php get_footer(); ?>
+<?php
+get_footer();

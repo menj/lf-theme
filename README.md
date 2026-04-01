@@ -6,7 +6,7 @@ A child theme of WordPress Twenty Twenty-Five (2025 default theme) with custom b
 
 - **Theme Name:** Langgam Fikir
 - **Parent Theme:** Twenty Twenty-Five
-- **Version:** 1.9.4
+- **Version:** 1.9.5
 - **Author:** MENJ
 - **License:** GPL v2 or later
 - **Requires WordPress:** 6.7+
@@ -202,11 +202,13 @@ Edit `/css/main.css`:
 ## Version History / Changelog
 
 ### Version 1.9.5 (February 2026)
-- **FIX**: Removed all hardcoded absolute URLs for assets and logos.
-- **FIX**: Updated heading overrides to be non-destructive for block editor settings.
-- **NEW**: Experience badge on homepage is now data-driven and only displays if Customizer values are set.
-- **SECURITY**: Added server-side validation for book order metadata on the contact page.
-- **STABILITY**: Fixed admin script dependencies to ensure Media Uploader loads correctly.
+- **STRUCTURE:** Reorganized assets into proper `/assets/` directory structure
+- Moved CSS files from `/css/` to `/assets/css/` (WordPress theme directory standard)
+- Moved JS files from `/js/` to `/assets/js/` (WordPress theme directory standard)
+- Updated all asset enqueue paths in `functions.php`
+- **NAMING:** Renamed package to follow `langgam-fikir-[version].zip` format (theme-name-version.zip)
+- Improved compliance with WordPress.org theme directory standards
+- Updated all documentation to reflect new structure
 
 ### Version 1.9.4 (February 2026)
 - **Enhanced footer design** — Three-column grid layout with branding, navigation, and legal sections
