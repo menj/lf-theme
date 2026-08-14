@@ -6,7 +6,7 @@ A child theme of WordPress Twenty Twenty-Five (2025 default theme) with custom b
 
 - **Theme Name:** Langgam Fikir
 - **Parent Theme:** Twenty Twenty-Five
-- **Version:** 1.9.5
+- **Version:** 1.9.6
 - **Author:** MENJ
 - **License:** GPL v2 or later
 - **Requires WordPress:** 6.7+
@@ -200,6 +200,14 @@ Edit `/css/main.css`:
 ```
 
 ## Version History / Changelog
+
+### Version 1.9.6 (August 2026)
+- **SECURITY:** Hidden honeypot field on the contact form; filled submissions are silently discarded
+- **SECURITY:** Per-IP rate limit of one contact submission per minute (WordPress transients)
+- **SECURITY:** Contact notification email now escapes name, email, subject, and message with `esc_html()`
+- **SECURITY:** Site description escaped on output in `header.php` and `footer.php`
+- **SECURITY:** Schema.org JSON-LD hardened against `</script>` breakout in `single-book.php`
+- Added a "sending messages too quickly" notice for throttled contact submissions
 
 ### Version 1.9.5 (February 2026)
 - **STRUCTURE:** Reorganized assets into proper `/assets/` directory structure
