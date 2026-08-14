@@ -514,10 +514,10 @@ function langgam_fikir_handle_contact_form() {
     }
 
     // Sanitize form data
-    $name    = sanitize_text_field( $_POST['contact_name'] );
-    $email   = sanitize_email( $_POST['contact_email'] );
-    $subject = sanitize_text_field( $_POST['contact_subject'] );
-    $message = sanitize_textarea_field( $_POST['contact_message'] );
+    $name    = sanitize_text_field( wp_unslash( $_POST['contact_name'] ) );
+    $email   = sanitize_email( wp_unslash( $_POST['contact_email'] ) );
+    $subject = sanitize_text_field( wp_unslash( $_POST['contact_subject'] ) );
+    $message = sanitize_textarea_field( wp_unslash( $_POST['contact_message'] ) );
 
     // Validate
     if ( empty( $name ) || empty( $email ) || empty( $subject ) || empty( $message ) ) {
