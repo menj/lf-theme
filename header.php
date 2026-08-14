@@ -29,7 +29,7 @@
                             $description = get_bloginfo( 'description', 'display' );
                             if ( $description || is_customize_preview() ) :
                                 ?>
-                                <p class="tagline"><?php echo $description; ?></p>
+                                <p class="tagline"><?php echo esc_html( $description ); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     $description = get_bloginfo( 'description', 'display' );
                     if ( $description || is_customize_preview() ) :
                         ?>
-                        <p class="tagline"><?php echo $description; ?></p>
+                        <p class="tagline"><?php echo esc_html( $description ); ?></p>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

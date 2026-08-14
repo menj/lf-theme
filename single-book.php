@@ -71,7 +71,7 @@ get_header();
             }
             
             if ( $isbn ) {
-                $schema['isbn'] = $isbn;
+                $schema['isbn'] = (string) $isbn;
             }
             
             if ( has_post_thumbnail() ) {
@@ -88,7 +88,7 @@ get_header();
             if ( $status === 'published' && $price ) {
                 $schema['offers'] = array(
                     '@type'         => 'Offer',
-                    'price'         => $price,
+                    'price'         => number_format( (float) $price, 2, '.', '' ),
                     'priceCurrency' => 'MYR',
                     'availability'  => 'https://schema.org/InStock',
                     'url'           => get_permalink(),
@@ -96,7 +96,7 @@ get_header();
             } elseif ( $status === 'pre-order' && $price ) {
                 $schema['offers'] = array(
                     '@type'         => 'Offer',
-                    'price'         => $price,
+                    'price'         => number_format( (float) $price, 2, '.', '' ),
                     'priceCurrency' => 'MYR',
                     'availability'  => 'https://schema.org/PreOrder',
                     'url'           => get_permalink(),
@@ -123,7 +123,7 @@ get_header();
             ?>
             
             <script type="application/ld+json">
-            <?php echo wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ); ?>
+            <?php echo wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>
             </script>
             
             <div class="container">
@@ -204,7 +204,7 @@ get_header();
                             <?php if ( $price && in_array( $status, array( 'published', 'pre-order' ) ) ) : ?>
                                 <div class="book-meta-price">
                                     <span class="meta-label"><?php _e( 'Price', 'langgam-fikir' ); ?></span>
-                                    <span class="price-amount">RM <?php echo number_format( (float) $price, 2 ); ?></span>
+                                    <span class="price-amount">RM <?php echo esc_html( number_format( (float) $price, 2 ) ); ?></span>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -234,7 +234,7 @@ get_header();
                                 </div>
                                 
                                 <?php if ( class_exists( 'WooCommerce' ) ) : ?>
-                                    <button class="btn btn-primary add-to-cart-btn" data-product-id="<?php echo get_the_ID(); ?>">
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-id="<?php echo esc_attr( get_the_ID() ); ?>">
                                         <?php 
                                         if ( $book_status === 'pre-order' ) {
                                             _e( 'PRE-ORDER NOW', 'langgam-fikir' );
