@@ -4,7 +4,7 @@ Tags: books, publishing, minimalist, clean, custom-colors, custom-menu, featured
 Requires at least: 6.7
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,14 @@ Go to Appearance > Customize > Homepage Settings. You can set the number of feat
 8. Admin - Book edit screen with metadata fields
 
 == Changelog ==
+
+= 1.9.6 (August 2026) =
+* SECURITY: Added hidden honeypot field to the contact form to block automated submissions
+* SECURITY: Added per-IP rate limit of one contact submission per minute
+* SECURITY: Escaped name, email, subject, and message in the contact notification email
+* SECURITY: Escaped the site description output in header.php and footer.php
+* SECURITY: Hardened the Schema.org JSON-LD block against script-tag breakout
+* Added a "sending messages too quickly" notice on the contact page
 
 = 1.9.5 (February 2026) =
 * STRUCTURE: Reorganized assets into proper /assets/ directory

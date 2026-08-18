@@ -5,6 +5,19 @@ All notable changes to the Langgam Fikir WordPress theme will be documented in t
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.6] - 2026-08-14
+
+### Security
+- Added a hidden honeypot field (`contact_website`) to the contact form; submissions that fill it are silently discarded
+- Added a per-IP rate limit of one contact submission per minute using WordPress transients
+- Escaped `$name`, `$email`, `$subject`, and the message body with `esc_html()` before building the HTML notification email
+- Escaped the site description output in `header.php` and `footer.php` with `esc_html()`
+- Hardened the Schema.org JSON-LD block in `single-book.php` against `</script>` breakout by adding `JSON_HEX_TAG`, `JSON_HEX_AMP`, `JSON_HEX_APOS`, and `JSON_HEX_QUOT` to `wp_json_encode()`
+- Escaped the book `data-product-id` attribute and the displayed price on the single book template
+
+### Added
+- New `contact=throttled` form state with a "sending messages too quickly" notice on the contact page
+
 ## [1.9.5] - 2026-02-09
 
 ### Changed

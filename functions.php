@@ -496,11 +496,28 @@ function langgam_fikir_handle_contact_form() {
         exit;
     }
 
+    // Honeypot: bots fill hidden fields, humans never see them.
+    if ( ! empty( $_POST['contact_website'] ) ) {
+        wp_redirect( add_query_arg( 'contact', 'success', wp_get_referer() ) );
+        exit;
+    }
+
+    // Rate limit: one submission per minute per IP.
+    $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+    if ( $ip ) {
+        $throttle_key = 'lf_contact_' . md5( $ip );
+        if ( get_transient( $throttle_key ) ) {
+            wp_redirect( add_query_arg( 'contact', 'throttled', wp_get_referer() ) );
+            exit;
+        }
+        set_transient( $throttle_key, 1, MINUTE_IN_SECONDS );
+    }
+
     // Sanitize form data
-    $name    = sanitize_text_field( $_POST['contact_name'] );
-    $email   = sanitize_email( $_POST['contact_email'] );
-    $subject = sanitize_text_field( $_POST['contact_subject'] );
-    $message = sanitize_textarea_field( $_POST['contact_message'] );
+    $name    = sanitize_text_field( wp_unslash( $_POST['contact_name'] ) );
+    $email   = sanitize_email( wp_unslash( $_POST['contact_email'] ) );
+    $subject = sanitize_text_field( wp_unslash( $_POST['contact_subject'] ) );
+    $message = sanitize_textarea_field( wp_unslash( $_POST['contact_message'] ) );
 
     // Validate
     if ( empty( $name ) || empty( $email ) || empty( $subject ) || empty( $message ) ) {
@@ -521,10 +538,10 @@ function langgam_fikir_handle_contact_form() {
     
     $email_message = sprintf(
         __( '<p><strong>Name:</strong> %s</p><p><strong>Email:</strong> %s</p><p><strong>Subject:</strong> %s</p><p><strong>Message:</strong><br>%s</p>', 'langgam-fikir' ),
-        $name,
-        $email,
-        $subject,
-        nl2br( $message )
+        esc_html( $name ),
+        esc_html( $email ),
+        esc_html( $subject ),
+        nl2br( esc_html( $message ) )
     );
 
     // Send email

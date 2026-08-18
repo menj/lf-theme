@@ -33,6 +33,10 @@ get_header();
                             <div class="form-message success">
                                 <?php _e( 'Thank you for your message! We will get back to you soon.', 'langgam-fikir' ); ?>
                             </div>
+                        <?php elseif ( isset( $_GET['contact'] ) && $_GET['contact'] == 'throttled' ) : ?>
+                            <div class="form-message error">
+                                <?php _e( 'You are sending messages too quickly. Please wait a moment and try again.', 'langgam-fikir' ); ?>
+                            </div>
                         <?php elseif ( isset( $_GET['contact'] ) && $_GET['contact'] == 'error' ) : ?>
                             <div class="form-message error">
                                 <?php _e( 'There was an error sending your message. Please try again.', 'langgam-fikir' ); ?>
@@ -78,6 +82,11 @@ get_header();
                         <form class="contact-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                             <input type="hidden" name="action" value="langgam_fikir_contact_form">
                             <?php wp_nonce_field( 'langgam_fikir_contact', 'contact_nonce' ); ?>
+                            
+                            <p class="contact-website-field" aria-hidden="true" style="position:absolute;left:-9999px;">
+                                <label for="contact_website"><?php _e( 'Leave this field empty', 'langgam-fikir' ); ?></label>
+                                <input type="text" id="contact_website" name="contact_website" value="" tabindex="-1" autocomplete="off">
+                            </p>
                             
                             <div class="form-row-dual">
                                 <div class="form-field">
